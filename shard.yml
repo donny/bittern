@@ -1,0 +1,11 @@
+name: bittern
+version: 0.1.0
+
+authors:
+  - Donny Kurniawan <donny.kurniawan@gmail.com>
+
+targets:
+  bittern:
+    main: src/bittern.cr
+
+crystal: 0.20.3
