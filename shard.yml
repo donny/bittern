@@ -2,7 +2,7 @@ name: bittern
 version: 0.1.0
 
 authors:
-  - Donny Kurniawan <donny.kurniawan@gmail.com>
+  - Donny
 
 targets:
   bittern:
