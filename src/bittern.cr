@@ -12,6 +12,17 @@ module Bittern
         output.puts Bittern.version_string
         return true
       end
+
+      if options.errors.any?
+        output.puts options.parser
+        output.puts
+        output.puts "Errors:"
+        options.errors.each do |error|
+          output.puts "  * " + error.to_s
+        end
+        output.puts
+        return false
+      end
     end
   end
 end
