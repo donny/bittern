@@ -1,23 +1,23 @@
 module Bittern
   module CLI
     def self.run(argv, output)
-      options = Options.parse(argv)
+      option = Option.parse(argv)
 
-      if options.show_help
-        output.puts options.parser
+      if option.show_help
+        output.puts option.parser
         return true
       end
 
-      if options.show_version
+      if option.show_version
         output.puts Bittern.version_string
         return true
       end
 
-      if options.errors.any?
-        output.puts options.parser
+      if option.errors.any?
+        output.puts option.parser
         output.puts
         output.puts "Errors:"
-        options.errors.each do |error|
+        option.errors.each do |error|
           output.puts "  * " + error.to_s
         end
         output.puts
