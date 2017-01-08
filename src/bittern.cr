@@ -23,6 +23,12 @@ module Bittern
         puts
         return false
       end
+
+      if option.server_mode
+        Server.new(option).run
+      else
+        Client.new(option).run
+      end
     end
   end
 end
