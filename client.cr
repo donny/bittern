@@ -2,12 +2,7 @@ require "socket"
 
 client = TCPSocket.new("localhost", 1234)
 
-spawn do
-  loop do
-    response = client.gets
-    puts response
-  end
-end
+process_message(client)
 
 # Main loop
 loop do
@@ -22,3 +17,14 @@ loop do
 end
 
 client.close
+
+# Functions
+
+def process_message(client)
+  spawn do
+    loop do
+      response = client.gets
+      puts response
+    end
+  end
+end

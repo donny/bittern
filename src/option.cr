@@ -6,8 +6,10 @@ module Bittern
     property show_help : Bool = false
     property show_version : Bool = false
 
+    property server_mode : Bool = true
     property server_address : String = "localhost"
     property server_port : String = "8177"
+    property client_name : String?
 
     property errors : Array(Exception) = [] of Exception
 
@@ -24,6 +26,10 @@ module Bittern
           end
           parser.on("-p PORT", "--port PORT", "Specifies the server's port number") do |port|
             option.server_port = port
+          end
+          parser.on("-c NAME", "--client NAME", "Connects as a client using name") do |name|
+            option.server_mode = false
+            option.client_name = name
           end
           parser.on("-h", "--help", "Show this help") { option.show_help = true }
           parser.on("-v", "--version", "Display version") { option.show_version = true }
