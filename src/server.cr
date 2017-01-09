@@ -2,10 +2,17 @@ require "socket"
 require "colorize"
 
 module Bittern
+  private struct ConnectedClient
+    property socket, name
+
+    def initialize(@socket : TCPSocket, @name : String)
+    end
+  end
+
   class Server
     @host : String
     @port : Int32
-    @connected_clients = [] of TCPSocket
+    @connected_clients = {} of TCPSocket => ConnectedClient
 
     def initialize(@option : Option)
       @host = @option.server_address
@@ -18,9 +25,6 @@ module Bittern
       puts message.colorize(:blue)
       loop do
         socket = @server.accept
-        message = "Accepting client from #{socket.remote_address}"
-        puts message.colorize(:green)
-        @connected_clients.push(socket)
         process_connection(socket)
       end
     end
@@ -33,16 +37,33 @@ module Bittern
             socket.close
             break
           else
-            message += "\n"
-
-            puts message
-
-            @connected_clients.map do |client|
-              client.write(message.to_slice)
-            end
+            process_client_message(message, socket)
           end
           break if socket.closed?
         end
+      end
+    end
+
+    def process_client_message(raw_string, socket)
+      message = Message.new(raw_string)
+
+      case message.mtype
+      when MessageType::ClientJoin
+        puts "#{message.content} is joining from #{socket.remote_address}".colorize(:blue)
+        @connected_clients[socket] = ConnectedClient.new(socket, message.content)
+      when MessageType::ClientLeave
+        client = @connected_clients[socket]
+        puts "#{client.name} is leaving".colorize(:cyan)
+        @connected_clients.delete(socket)
+      when MessageType::ClientMessage
+        client = @connected_clients[socket]
+        info = "#{client.name}: #{message.content}\n".colorize(:green)
+        puts info
+        @connected_clients.each do |client|
+          client[0].write(info.to_s.to_slice)
+        end
+      else
+        puts "ERROR".colorize(:red)
       end
     end
   end
