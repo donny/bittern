@@ -1,4 +1,5 @@
 require "socket"
+require "colorize"
 
 module Bittern
   class Server
@@ -13,9 +14,12 @@ module Bittern
     end
 
     def run
-      puts "Server"
+      message = "Running Bittern server on #{@host}:#{@port}"
+      puts message.colorize(:blue)
       loop do
         socket = @server.accept
+        message = "Accepting client from #{socket.remote_address}"
+        puts message.colorize(:green)
         @connected_clients.push(socket)
         process_connection(socket)
       end
