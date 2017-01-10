@@ -60,9 +60,9 @@ module Bittern
         @connected_clients.delete(socket)
       when MessageType::ClientMessage
         client = @connected_clients[socket]
-        info = "#{client.name}: #{message.content}\n".colorize(client.color)
+        output = "#{client.name}:".colorize(client.color).to_s + " #{message.content}\n"
         @connected_clients.each do |client|
-          client[0].write(info.to_s.to_slice)
+          client[0].write(output.to_slice)
         end
       else
         puts "ERROR".colorize(:red)
