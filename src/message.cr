@@ -3,6 +3,7 @@ module Bittern
     ClientJoin
     ClientLeave
     ClientMessage
+    ClientList
     Error
   end
 
@@ -25,6 +26,8 @@ module Bittern
       when "CLIENT_MESSAGE"
         @mtype = MessageType::ClientMessage
         @content = data[1]
+      when "CLIENT_LIST"
+        @mtype = MessageType::ClientList
       else
         @mtype = MessageType::Error
       end
@@ -38,6 +41,8 @@ module Bittern
         "CLIENT_LEAVE\n"
       when MessageType::ClientMessage
         "CLIENT_MESSAGE|" + content + "\n"
+      when MessageType::ClientList
+        "CLIENT_LIST\n"
       else
         "ERROR\n"
       end

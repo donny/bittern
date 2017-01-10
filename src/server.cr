@@ -25,7 +25,7 @@ module Bittern
 
     def run
       message = "Running Bittern server on #{@host}:#{@port}"
-      puts message.colorize(:blue)
+      puts message.colorize(:green)
       loop do
         socket = @server.accept
         process_connection(socket)
@@ -61,9 +61,18 @@ module Bittern
       when MessageType::ClientMessage
         client = @connected_clients[socket]
         output = "#{client.name}:".colorize(client.color).to_s + " #{message.content}\n"
-        @connected_clients.each do |client|
-          client[0].write(output.to_slice)
+        @connected_clients.each_value do |client|
+          client.socket.write(output.to_slice)
         end
+      when MessageType::ClientList
+        client = @connected_clients[socket]
+        output = "List of people:"
+        @connected_clients.each_value do |client|
+          output += " #{client.name}"
+        end
+        output = output.colorize.mode(:underline).to_s
+        output += "\n"
+        client.socket.write(output.to_slice)
       else
         puts "ERROR".colorize(:red)
       end
