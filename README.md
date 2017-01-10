@@ -6,7 +6,7 @@ Bittern is a command-line interface (CLI) multi user chat system written in [Cry
 
 This project is part of [52projects](https://donny.github.io/52projects/) and the new stuff that I learn through this project: the [Crystal](https://crystal-lang.org) programming language.
 
-### Crystal language
+### Crystal Language
 
 As described in [Wikipedia](https://en.wikipedia.org/wiki/Crystal_(programming_language)), Crystal is a general-purpose, object-oriented programming language with syntax inspired by Ruby. It has several [language goals](https://crystal-lang.org):
 
