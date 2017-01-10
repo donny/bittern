@@ -4,8 +4,11 @@ require "colorize"
 module Bittern
   private struct ConnectedClient
     property socket, name
+    property color : Symbol
 
     def initialize(@socket : TCPSocket, @name : String)
+      colors = [:red, :green, :yellow, :blue, :magenta, :cyan]
+      @color = colors.sample(1).first
     end
   end
 
@@ -57,8 +60,7 @@ module Bittern
         @connected_clients.delete(socket)
       when MessageType::ClientMessage
         client = @connected_clients[socket]
-        info = "#{client.name}: #{message.content}\n".colorize(:green)
-        puts info
+        info = "#{client.name}: #{message.content}\n".colorize(client.color)
         @connected_clients.each do |client|
           client[0].write(info.to_s.to_slice)
         end
