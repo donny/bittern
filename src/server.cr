@@ -54,27 +54,35 @@ module Bittern
       when MessageType::ClientJoin
         puts "#{message.content} is joining from #{socket.remote_address}".colorize(:blue)
         @connected_clients[socket] = ConnectedClient.new(socket, message.content)
+        client = @connected_clients[socket]
+        output = "#{client.name} is joining Bittern".colorize.mode(:bold).to_s + "\n"
+        broadcast_to_clients(output)
       when MessageType::ClientLeave
         client = @connected_clients[socket]
         puts "#{client.name} is leaving".colorize(:cyan)
         @connected_clients.delete(socket)
+        output = "#{client.name} is leaving Bittern".colorize.mode(:bold).to_s + "\n"
+        broadcast_to_clients(output)
       when MessageType::ClientMessage
         client = @connected_clients[socket]
         output = "#{client.name}:".colorize(client.color).to_s + " #{message.content}\n"
-        @connected_clients.each_value do |client|
-          client.socket.write(output.to_slice)
-        end
+        broadcast_to_clients(output)
       when MessageType::ClientList
         client = @connected_clients[socket]
         output = "List of people:"
         @connected_clients.each_value do |client|
           output += " #{client.name}"
         end
-        output = output.colorize.mode(:underline).to_s
-        output += "\n"
+        output = output.colorize.mode(:bold).to_s + "\n"
         client.socket.write(output.to_slice)
       else
         puts "ERROR".colorize(:red)
+      end
+    end
+
+    def broadcast_to_clients(output)
+      @connected_clients.each_value do |client|
+        client.socket.write(output.to_slice)
       end
     end
   end
