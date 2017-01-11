@@ -53,4 +53,6 @@ Bittern is a simple CLI multi user chat system using TCP/IP socket connection. T
 
 ### Implementation
 
+The app is implemented using just Crystal's standard library without using any third party dependencies. In `src` directory, the file [bittern.cr](src/bittern.cr) implements the CLI wrapper while command line argument parsing is done by [`option`](src/option.cr) (using Crystal's [`OptionParser`](https://crystal-lang.org/api/0.20.4/OptionParser.html)).
+
 ### Conclusion
