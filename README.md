@@ -31,6 +31,20 @@ puts "Listening on http://127.0.0.1:8080"
 server.listen
 ```
 
+Crystal compiles to native code using an [LLVM](http://llvm.org) backend. Thus, we could do something like:
+
+```shell
+$ cat hello.cr
+puts "Hello World"
+$ crystal build hello.cr
+$ file hello
+hello: Mach-O 64-bit executable x86_64
+$ ./hello
+Hello World
+```
+
+This improves performance since the code is compiled rather than interpreted. Furthermore, it leverages LLVM optimisation passes such as dead code elimination, function inlining, etc. Crystal has extensive [documentation](https://crystal-lang.org/docs/) and [API reference](https://crystal-lang.org/api).
+
 ### Project
 
 ### Implementation
