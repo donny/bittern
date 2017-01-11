@@ -53,6 +53,70 @@ Bittern is a simple CLI multi user chat system using TCP/IP socket connection. T
 
 ### Implementation
 
-The app is implemented using just Crystal's standard library without using any third party dependencies. In `src` directory, the file [bittern.cr](src/bittern.cr) implements the CLI wrapper while command line argument parsing is done by [`option`](src/option.cr) (using Crystal's [`OptionParser`](https://crystal-lang.org/api/0.20.4/OptionParser.html)).
+The app is implemented using just Crystal's standard library without using any third party dependencies. In `src` directory, the file [`bittern.cr`](src/bittern.cr) implements the CLI wrapper while command line argument parsing is done by [`option`](src/option.cr) (using Crystal's [`OptionParser`](https://crystal-lang.org/api/0.20.4/OptionParser.html)). A simple client/server protocol is defined in [`message.cr`](src/message.cr) using `enum` and `struct`.
+
+The [concurrency](https://crystal-lang.org/docs/guides/concurrency.html) model of Crystal is inspired by [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes) and [Go](https://golang.org). Crystal has fibers where a fiber is similar to a lightweight OS thread and its execution is managed internally by the Crystal process. Crystal has channels that allow fibers to communicate data without sharing memory.
+
+The Bittern [Server](src/server.cr) spawns a fiber (with the function `spawn`) for each incoming connection:
+
+```crystal
+def run
+  message = "Running Bittern server on #{@host}:#{@port}"
+  puts message.colorize(:green)
+  loop do
+    socket = @server.accept
+    process_connection(socket)
+  end
+end
+
+def process_connection(socket)
+  spawn do
+    loop do
+      message = socket.gets
+      if message.nil?
+        socket.close
+        break
+      else
+        process_client_message(message, socket)
+      end
+      break if socket.closed?
+    end
+  end
+end
+```
+
+The Bittern [Client](src/client.cr) spawns a fiber to process incoming server messages whilst the main loop handles user interaction:
+
+```crystal
+def run
+  tell_server(MessageType::ClientJoin, @name)
+
+  message = "Connected to Bittern server on #{@host}:#{@port} as #{@name}"
+  puts message.colorize(:green)
+
+  process_incoming_message()
+
+  loop do
+    input = gets
+
+    break unless process_user_input(input)
+  end
+  @socket.close
+end
+
+def process_incoming_message
+  spawn do
+    loop do
+      response = @socket.gets
+      if response.nil?
+        @socket.close
+        break
+      else
+        puts response
+      end
+    end
+  end
+end
+```
 
 ### Conclusion
