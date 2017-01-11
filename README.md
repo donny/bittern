@@ -49,7 +49,11 @@ This improves performance since the code is compiled rather than interpreted. Fu
 
 Bittern is a simple CLI multi user chat system using TCP/IP socket connection. The server can be started by running `crystal bittern.cr -- -a localhost -p 8177`, passing the hostname (default is `localhost`) and the port number (default is `8177`) where the server can listen on. Thus, we could simply start the server by running `crystal bittern.cr`. The client can be started by running `crystal bittern.cr -- -c Alice`, and passing the name of the user as a parameter. By default, the client connects to the server on `localhost:8177`. We could use `-a` and `-p` command line arguments to pass a different server address. The screenshot of the app in several terminal windows:
 
+![Screenshot](https://raw.githubusercontent.com/donny/bittern/master/screenshot.png)
+
 A movie that shows the app in action can be seen below:
+
+![Movie](https://raw.githubusercontent.com/donny/bittern/master/movie.mov)
 
 ### Implementation
 
