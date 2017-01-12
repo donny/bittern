@@ -120,3 +120,10 @@ end
 ```
 
 ### Conclusion
+
+There are a few things that I like about Crystal:
+
+- Type system. In my opinion, having a stronger type system is good since it allows the compiler to catch simple type errors and helps us avoid unintended nil/null data. There were a few times when I couldn't compile the code because I forgot to take into account nil cases. It's better to fix compile-time errors rather than runtime errors.
+- Macros. I didn't have the chance to use Crystal macros greatly. But from the [documentation](https://crystal-lang.org/docs/syntax_and_semantics/macros.html), Crystal macros are pretty powerful. They are methods that receive abstract syntax tree (AST) nodes at compile-time and produce code that is pasted into a program. We can write generics or parameterised methods using macros. And we can write powerful meta methods for our code.
+
+I do have fun in learning and writing Crystal code. Given the chance, I look forward to write more code in Crystal. [Awesome Crystal](http://awesome-crystal.com) shows a curated list of awesome Crystal code and resources.
